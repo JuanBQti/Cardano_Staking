@@ -1,0 +1,144 @@
+{
+  "goal": "Explain delegator pool choice dynamics using lagged attributes",
+  "dependent_variable": "delta_log_delegators = log(1+delegators_t) - log(1+delegators_{t-1})",
+  "method": "Two-way FE (pool + epoch), cluster-robust SE by pool",
+  "input_files": {
+    "source_panel": "/Users/juancho/staking_pools_panel.csv",
+    "choice_panel": "/Users/juancho/delegator_choice_panel.csv"
+  },
+  "specifications": {
+    "S1_lag1_core": {
+      "regressors": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "lag1_margin_proxy"
+      ],
+      "n_obs": 14635,
+      "n_pools": 2935,
+      "n_epochs": 5,
+      "within_r2": 0.019153727153091382,
+      "coefficients": {
+        "lag1_luck": {
+          "beta": -0.00017172952387412628,
+          "se_cluster_pool": 0.0006105570171999468,
+          "t": -0.28126697267634193,
+          "p_norm_approx": 0.778505640163015
+        },
+        "lag1_log_pledge": {
+          "beta": -0.0035024548700197233,
+          "se_cluster_pool": 0.0015539319493366635,
+          "t": -2.2539306637686662,
+          "p_norm_approx": 0.024200530261879738
+        },
+        "lag1_log_stake": {
+          "beta": 0.014692940944493029,
+          "se_cluster_pool": 0.003616318918482094,
+          "t": 4.062954975956659,
+          "p_norm_approx": 4.845537856335014e-05
+        },
+        "lag1_margin_proxy": {
+          "beta": -0.00030215768718005174,
+          "se_cluster_pool": 0.0002879159776650078,
+          "t": -1.049464811333306,
+          "p_norm_approx": 0.2939642425223845
+        }
+      }
+    },
+    "S2_lag1_with_persistence": {
+      "regressors": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "lag1_margin_proxy",
+        "lag1_log_delegators"
+      ],
+      "n_obs": 14635,
+      "n_pools": 2935,
+      "n_epochs": 5,
+      "within_r2": 0.5107373800479624,
+      "coefficients": {
+        "lag1_luck": {
+          "beta": -0.0017256873979738024,
+          "se_cluster_pool": 0.0005604133327641006,
+          "t": -3.0793118169802898,
+          "p_norm_approx": 0.0020747940003076337
+        },
+        "lag1_log_pledge": {
+          "beta": 0.004412368189879594,
+          "se_cluster_pool": 0.0031109898297378576,
+          "t": 1.4183164945452087,
+          "p_norm_approx": 0.15609838313236457
+        },
+        "lag1_log_stake": {
+          "beta": 0.023792152688145767,
+          "se_cluster_pool": 0.005022247300933505,
+          "t": 4.737351879052914,
+          "p_norm_approx": 2.165290097000394e-06
+        },
+        "lag1_margin_proxy": {
+          "beta": 0.0018124975518955958,
+          "se_cluster_pool": 0.0004849969880183061,
+          "t": 3.737131563025673,
+          "p_norm_approx": 0.00018613154381208474
+        },
+        "lag1_log_delegators": {
+          "beta": -0.6534350834124413,
+          "se_cluster_pool": 0.13832644022652962,
+          "t": -4.723862497598771,
+          "p_norm_approx": 2.3140690874612346e-06
+        }
+      }
+    },
+    "S3_lag2_robustness": {
+      "regressors": [
+        "lag2_luck",
+        "lag1_log_pledge",
+        "lag2_log_stake",
+        "lag1_margin_proxy",
+        "lag2_log_delegators"
+      ],
+      "n_obs": 8782,
+      "n_pools": 2934,
+      "n_epochs": 3,
+      "within_r2": 0.30094491010404345,
+      "coefficients": {
+        "lag2_luck": {
+          "beta": 6.593529223412452e-05,
+          "se_cluster_pool": 0.0006468145405630443,
+          "t": 0.1019384817427398,
+          "p_norm_approx": 0.9188055050312756
+        },
+        "lag1_log_pledge": {
+          "beta": -0.0010550833769128907,
+          "se_cluster_pool": 0.001494468160086388,
+          "t": -0.7059925430943282,
+          "p_norm_approx": 0.48019277475860656
+        },
+        "lag2_log_stake": {
+          "beta": 0.02553981615528631,
+          "se_cluster_pool": 0.004134722591457776,
+          "t": 6.17691165256186,
+          "p_norm_approx": 6.5367622426038e-10
+        },
+        "lag1_margin_proxy": {
+          "beta": 0.000815510115146905,
+          "se_cluster_pool": 0.00012636170997785005,
+          "t": 6.453775556613279,
+          "p_norm_approx": 1.0909739778242056e-10
+        },
+        "lag2_log_delegators": {
+          "beta": -0.35754760172193056,
+          "se_cluster_pool": 0.06834564555440342,
+          "t": -5.231461328978467,
+          "p_norm_approx": 1.6817521997225526e-07
+        }
+      }
+    }
+  },
+  "notes": [
+    "Lagged regressors are used to reduce reverse-causality concerns.",
+    "Margin is proxied by lagged reward.member_pct due panel availability in source epoch blocks.",
+    "Interpretation remains associational/quasi-causal, not full causal identification."
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "source_file": "/Users/juancho/staking_pools.csv",
+  "compact_file": "/Users/juancho/staking_pools_compact.csv",
+  "not_active_file": "/Users/juancho/staking_pools_not_active.csv",
+  "total_pools_source": 2941,
+  "excluded_not_active_count": 224,
+  "total_pools_active_only": 2717,
+  "saturation_ge_1": {
+    "count": 7,
+    "percentage": 0.25763709974236293
+  },
+  "pledge_zero": {
+    "count": 224,
+    "percentage": 8.244387191755614
+  },
+  "stake_eq_pledge": {
+    "count": 329,
+    "percentage": 12.108943687891056
+  },
+  "summary_stake_pledge": {
+    "total_active_stake_lovelace": "21568605266709153",
+    "total_active_pledge_lovelace": "2931539332441532",
+    "avg_active_stake_lovelace": "7938389866289.714022819285977",
+    "avg_active_pledge_lovelace": "1078961844844.141332351858668"
+  },
+  "L_values": [
+    1,
+    10,
+    25,
+    100
+  ],
+  "L_results": {
+    "1": {
+      "count_stake_gt_pledgeL": 2339,
+      "sum_stake_minus_pledgeL": "18726810933387842",
+      "sum_stake_minus_pledgeL_pledge0": "2747535008853776",
+      "count_stake_lt_pledgeL": 49,
+      "sum_pledgeL_minus_stake": "89744999120221"
+    },
+    "10": {
+      "count_stake_gt_pledgeL": 1511,
+      "sum_stake_minus_pledgeL": "17401375997162533",
+      "sum_stake_minus_pledgeL_pledge0": "2747535008853776",
+      "count_stake_lt_pledgeL": 1206,
+      "sum_pledgeL_minus_stake": "25148164054868700"
+    },
+    "25": {
+      "count_stake_gt_pledgeL": 1289,
+      "sum_stake_minus_pledgeL": "16195180233611471",
+      "sum_stake_minus_pledgeL_pledge0": "2747535008853776",
+      "count_stake_lt_pledgeL": 1428,
+      "sum_pledgeL_minus_stake": "67915058277940618"
+    },
+    "100": {
+      "count_stake_gt_pledgeL": 998,
+      "sum_stake_minus_pledgeL": "13473519174517275",
+      "sum_stake_minus_pledgeL_pledge0": "2747535008853776",
+      "count_stake_lt_pledgeL": 1719,
+      "sum_pledgeL_minus_stake": "285058847151961322"
+    }
+  },
+  "stake_eq_pledge_margin_distribution_grouped": {
+    "=0": 49,
+    "(0.0,0.1]": 223,
+    "(0.1,0.2]": 22,
+    "(0.2,0.3]": 1,
+    "(0.3,0.4]": 0,
+    "(0.4,0.5]": 0,
+    "(0.5,0.6]": 0,
+    "(0.6,0.7]": 0,
+    "(0.7,0.8]": 0,
+    "(0.8,0.9]": 1,
+    "(0.9,1)": 3,
+    "=1": 30
+  },
+  "stake_eq_pledge_fixed_cost_distribution_grouped": {
+    "=0": 0,
+    "(0,340)": 31,
+    "=340": 218,
+    "340-500": 79,
+    ">500": 1
+  },
+  "chart_data_files": {
+    "stake_minus_pledge_vs_pledge": "/Users/juancho/chart_data_stake_minus_pledge_vs_pledge.csv",
+    "stake_minus_pledge_vs_margin": "/Users/juancho/chart_data_stake_minus_pledge_vs_margin.csv",
+    "stake_minus_pledge_vs_fixed_cost_binned_ada": "/Users/juancho/chart_data_stake_minus_pledge_vs_fixed_cost.csv",
+    "stake_minus_pledge_vs_lifetime_luck": "/Users/juancho/chart_data_stake_minus_pledge_vs_lifetime_luck.csv",
+    "stake_minus_pledge_vs_recent_luck": "/Users/juancho/chart_data_stake_minus_pledge_vs_recent_luck.csv",
+    "stake_minus_pledge_vs_lifetime_roa": "/Users/juancho/chart_data_stake_minus_pledge_vs_lifetime_roa.csv",
+    "stake_minus_pledge_vs_recent_roa": "/Users/juancho/chart_data_stake_minus_pledge_vs_recent_roa.csv"
+  }
+}

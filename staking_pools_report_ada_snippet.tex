@@ -1,0 +1,294 @@
+% LaTeX snippet (copy/paste into your document)
+% Requires: \usepackage{booktabs,longtable,graphicx,pdflscape,float,pgfplots}
+\subsection*{Dataset Filtering}
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+Metric & Value \\
+\midrule
+Pools in source & 2941 \\
+Excluded not active pools ($active\_stake=0$) & 224 \\
+Pools used in calculations (active only) & 2717 \\
+\bottomrule
+\end{tabular}
+\caption{Filtering applied before running all calculations.}
+\end{table}
+
+\subsection*{Global Stake and Pledge Summary (Million ADA)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+Metric & Value \\
+\midrule
+Total active stake & 21568.605M \\
+Total active pledge & 2931.539M \\
+Average active stake & 7.938M \\
+Average active pledge & 1.079M \\
+\bottomrule
+\end{tabular}
+\caption{Aggregate and average values in million ADA (active pools only).}
+\end{table}
+
+\subsection*{Saturation, Zero Pledge, and Stake=Pledge (active pools only)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Metric & Count & Percentage \\
+\midrule
+Saturation $\geq$ 1 (100\%) & 7 & 0.2576\% \\
+Active pledge = 0 & 224 & 8.2444\% \\
+Active stake = active pledge & 329 & 12.1089\% \\
+\bottomrule
+\end{tabular}
+\caption{Counts and percentages among active pools only.}
+\end{table}
+
+\subsection*{Distribution for stake = pledge subgroup}
+\paragraph{Margin distribution (12 groups)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Margin group & Count & \% of subgroup \\
+\midrule
+{}=0 & 49 & 14.89\% \\
+{}(0.0,0.1] & 223 & 67.78\% \\
+{}(0.1,0.2] & 22 & 6.69\% \\
+{}(0.2,0.3] & 1 & 0.30\% \\
+{}(0.3,0.4] & 0 & 0.00\% \\
+{}(0.4,0.5] & 0 & 0.00\% \\
+{}(0.5,0.6] & 0 & 0.00\% \\
+{}(0.6,0.7] & 0 & 0.00\% \\
+{}(0.7,0.8] & 0 & 0.00\% \\
+{}(0.8,0.9] & 1 & 0.30\% \\
+{}(0.9,1) & 3 & 0.91\% \\
+{}=1 & 30 & 9.12\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+\paragraph{Fixed cost distribution (ADA groups)}
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Fixed cost group [ADA] & Count & \% of subgroup \\
+\midrule
+{}=0 & 0 & 0.00\% \\
+{}(0,340) & 31 & 9.42\% \\
+{}=340 & 218 & 66.26\% \\
+{}340-500 & 79 & 24.01\% \\
+{}>500 & 1 & 0.30\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{$pledge \times L$ Calculations (Million ADA, active pools only)}
+\begin{landscape}
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{8pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{rrrrrr}
+\toprule
+$L$ & $\#(stake > pledge\cdot L)$ & $\sum(stake-pledge\cdot L)$ [M ADA] & $\sum(stake-pledge\cdot L\mid pledge=0)$ [M ADA] & $\#(stake < pledge\cdot L)$ & $\sum(pledge\cdot L-stake)$ [M ADA] \\
+\midrule
+1 & 2339 & 18726.811M & 2747.535M & 49 & 89.745M \\
+10 & 1511 & 17401.376M & 2747.535M & 1206 & 25148.164M \\
+25 & 1289 & 16195.18M & 2747.535M & 1428 & 67915.058M \\
+100 & 998 & 13473.519M & 2747.535M & 1719 & 285058.847M \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Aggregate excess/deficit values in million ADA for each multiplier $L$ (active pools only).}
+\end{table}
+\end{landscape}
+
+\subsection*{Charts for pools with stake > pledge}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=0.9\textwidth, height=0.42\textheight,
+title={{}Stake-Pledge vs Pledge},
+xlabel={{}Pledge (M ADA)},
+ylabel={Stake - Pledge (M ADA)},
+grid=both,
+mark size=1.2pt,
+]
+\addplot[only marks, opacity=0.6] table [x=x, y=y, col sep=comma] {chart_data_stake_minus_pledge_vs_pledge.csv};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=0.9\textwidth, height=0.42\textheight,
+title={{}Stake-Pledge vs Margin},
+xlabel={{}Margin},
+ylabel={Stake - Pledge (M ADA)},
+grid=both,
+mark size=1.2pt,
+]
+\addplot[only marks, opacity=0.6] table [x=x, y=y, col sep=comma] {chart_data_stake_minus_pledge_vs_margin.csv};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=0.9\textwidth, height=0.42\textheight,
+title={{}Stake-Pledge vs Fixed Cost (binned)},
+xlabel={{}Fixed cost bin center (ADA)},
+ylabel={Stake - Pledge (M ADA)},
+grid=both,
+mark size=1.2pt,
+xmin=0, xmax=1000,
+]
+\addplot[only marks, opacity=0.6] table [x=x, y=y, col sep=comma] {chart_data_stake_minus_pledge_vs_fixed_cost.csv};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=0.9\textwidth, height=0.42\textheight,
+title={{}Stake-Pledge vs Lifetime Luck},
+xlabel={{}Lifetime luck},
+ylabel={Stake - Pledge (M ADA)},
+grid=both,
+mark size=1.2pt,
+]
+\addplot[only marks, opacity=0.6] table [x=x, y=y, col sep=comma] {chart_data_stake_minus_pledge_vs_lifetime_luck.csv};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=0.9\textwidth, height=0.42\textheight,
+title={{}Stake-Pledge vs Recent Luck},
+xlabel={{}Recent luck},
+ylabel={Stake - Pledge (M ADA)},
+grid=both,
+mark size=1.2pt,
+]
+\addplot[only marks, opacity=0.6] table [x=x, y=y, col sep=comma] {chart_data_stake_minus_pledge_vs_recent_luck.csv};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=0.9\textwidth, height=0.42\textheight,
+title={{}Stake-Pledge vs Lifetime ROA},
+xlabel={{}Lifetime ROA},
+ylabel={Stake - Pledge (M ADA)},
+grid=both,
+mark size=1.2pt,
+]
+\addplot[only marks, opacity=0.6] table [x=x, y=y, col sep=comma] {chart_data_stake_minus_pledge_vs_lifetime_roa.csv};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=0.9\textwidth, height=0.42\textheight,
+title={{}Stake-Pledge vs Recent ROA},
+xlabel={{}Recent ROA},
+ylabel={Stake - Pledge (M ADA)},
+grid=both,
+mark size=1.2pt,
+]
+\addplot[only marks, opacity=0.6] table [x=x, y=y, col sep=comma] {chart_data_stake_minus_pledge_vs_recent_roa.csv};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
+% REGRESSION_SECTION_START
+\subsection*{Multivariate Regression Results}
+Sample: \textbf{2339} pools with $active\_stake > pledge$.\\
+Dependent variable: \texttt{log(1 + (active\_stake - pledge) in ADA)}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Model & ROA term(s) & $R^2$ & Adj. $R^2$ \\
+\midrule
+A & lifetime\_roa & 0.6664 & 0.6656 \\
+B & recent\_roa & 0.6930 & 0.6922 \\
+C & lifetime\_roa + recent\_roa & 0.7015 & 0.7006 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Model A}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Variable & Beta & Robust SE (HC1) & p-value \\
+\midrule
+Intercept & 5.1656 & 0.1467 & 0.0000 \\
+log\_pledge & 0.1664 & 0.0182 & 0.0000 \\
+margin & 1.7314 & 0.3763 & 0.0000 \\
+fixed\_cost\_ada & 0.0000 & 0.0000 & 0.0002 \\
+saturation & 5.5399 & 0.3864 & 0.0000 \\
+log\_delegators & 0.9535 & 0.0434 & 0.0000 \\
+lifetime\_roa & 0.5655 & 0.0592 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Model B}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Variable & Beta & Robust SE (HC1) & p-value \\
+\midrule
+Intercept & 5.8093 & 0.1498 & 0.0000 \\
+log\_pledge & 0.1304 & 0.0178 & 0.0000 \\
+margin & 2.3094 & 0.3770 & 0.0000 \\
+fixed\_cost\_ada & 0.0000 & 0.0000 & 0.0005 \\
+saturation & 3.4660 & 0.3988 & 0.0000 \\
+log\_delegators & 0.8503 & 0.0399 & 0.0000 \\
+recent\_roa & 1.7600 & 0.1360 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Model C}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Variable & Beta & Robust SE (HC1) & p-value \\
+\midrule
+Intercept & 5.5541 & 0.1468 & 0.0000 \\
+log\_pledge & 0.1266 & 0.0177 & 0.0000 \\
+margin & 2.6853 & 0.4033 & 0.0000 \\
+fixed\_cost\_ada & 0.0000 & 0.0000 & 0.0004 \\
+saturation & 3.6243 & 0.3997 & 0.0000 \\
+log\_delegators & 0.7505 & 0.0556 & 0.0000 \\
+lifetime\_roa & 0.3743 & 0.0730 & 0.0000 \\
+recent\_roa & 1.5650 & 0.1424 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% REGRESSION_SECTION_END

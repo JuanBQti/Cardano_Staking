@@ -1,0 +1,55 @@
+{
+  "design": "Two-way fixed effects (pool FE + epoch FE), lagged regressors",
+  "dependent_variable": "log(1+stake_t ADA) - log(1+stake_{t-1} ADA)",
+  "sample_rule": "requires consecutive epoch pair within pool",
+  "n_obs": 13536,
+  "n_pools": 2718,
+  "n_epochs": 5,
+  "regressors": [
+    "lag_luck",
+    "lag_log_pledge",
+    "lag_log_delegators",
+    "lag_member_pct",
+    "lag_block_minted"
+  ],
+  "within_r2": 0.0034577695284060406,
+  "coefficients": {
+    "lag_luck": {
+      "beta": 0.0013393669844144192,
+      "se_cluster_pool": 0.0024888055915865564,
+      "t": 0.5381565313667603,
+      "p_norm_approx": 0.5904689870440427
+    },
+    "lag_log_pledge": {
+      "beta": 0.0013939218715607522,
+      "se_cluster_pool": 0.019253325831019488,
+      "t": 0.07239901738508844,
+      "p_norm_approx": 0.9422843667574856
+    },
+    "lag_log_delegators": {
+      "beta": -0.2115762051473858,
+      "se_cluster_pool": 0.20206881882334188,
+      "t": -1.047050239514468,
+      "p_norm_approx": 0.2950764076960417
+    },
+    "lag_member_pct": {
+      "beta": 0.0034102191975203177,
+      "se_cluster_pool": 0.0006629215810587237,
+      "t": 5.1442271528919035,
+      "p_norm_approx": 2.6862434898689003e-07
+    },
+    "lag_block_minted": {
+      "beta": -0.004163859024797088,
+      "se_cluster_pool": 0.0021975013752708276,
+      "t": -1.8948152076964773,
+      "p_norm_approx": 0.058116887725035316
+    }
+  },
+  "notes": [
+    "Lagged covariates mitigate (but do not fully remove) simultaneity/reverse causality.",
+    "SE are cluster-robust at pool level."
+  ],
+  "output_files": {
+    "panel_csv": "/Users/juancho/staking_pools_panel.csv"
+  }
+}

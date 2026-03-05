@@ -1,0 +1,111 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage[T1]{fontenc}
+\title{Delegator Choice FE Report}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+Choice panel: \texttt{/Users/juancho/delegator\_choice\_panel.csv}\\
+Method: \textbf{Two-way FE (pool + epoch), cluster-robust SE by pool}\\
+Dependent variable: \texttt{delta\_log\_delegators = log(1+delegators\_t) - log(1+delegators\_\{t-1\})}
+
+\section*{Model Definitions}
+\begin{itemize}
+\item \textbf{S1 (lag1 core):} lag1\_luck, lag1\_log\_pledge, lag1\_log\_stake, lag1\_margin\_proxy.
+\item \textbf{S2 (lag1 + persistence):} S1 + lag1\_log\_delegators.
+\item \textbf{S3 (lag2 robustness):} lag2\_luck, lag1\_log\_pledge, lag2\_log\_stake, lag1\_margin\_proxy, lag2\_log\_delegators.
+\end{itemize}
+All specs include pool FE and epoch FE, with cluster-robust SE at pool level.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Spec & n\_obs & n\_pools & n\_epochs & Within $R^2$ \\
+\midrule
+S1 & 14635 & 2935 & 5 & 0.0192 \\
+S2 & 14635 & 2935 & 5 & 0.5107 \\
+S3 & 8782 & 2934 & 3 & 0.3009 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Interpretation (Pledge vs Stake)}
+\begin{itemize}
+\item $\log(stake)$ is consistently positive and statistically significant across specifications.
+\item $\log(pledge)$ is not robust: significant only in S1 (small negative), and insignificant in S2 and S3.
+\item Practical reading: within-pool over-time delegator growth is more strongly associated with prior stake/popularity than with pledge in this dataset/specification.
+\item Caution: this does not prove pledge has zero causal effect; it indicates weak/non-robust evidence after FE, lags, and controls.
+\end{itemize}
+
+\section*{Assumptions and Caveats}
+\begin{itemize}
+\item Strict exogeneity of lagged regressors conditional on FE (strong assumption).
+\item Lagging helps with reverse causality but does not eliminate all endogeneity.
+\item lag1\_margin\_proxy uses lagged reward.member\_pct (not direct historical margin).
+\item Remaining omitted time-varying factors may bias coefficients.
+\item p-values use normal approximation with cluster-robust SE.
+\end{itemize}
+
+\section*{S1: lag1 core}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+lag1\_luck & -0.0002 & 0.0006 & 0.7785 \\
+lag1\_log\_pledge & -0.0035 & 0.0016 & 0.0242 \\
+lag1\_log\_stake & 0.0147 & 0.0036 & 0.0000 \\
+lag1\_margin\_proxy & -0.0003 & 0.0003 & 0.2940 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{S2: lag1 + persistence}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+lag1\_luck & -0.0017 & 0.0006 & 0.0021 \\
+lag1\_log\_pledge & 0.0044 & 0.0031 & 0.1561 \\
+lag1\_log\_stake & 0.0238 & 0.0050 & 0.0000 \\
+lag1\_margin\_proxy & 0.0018 & 0.0005 & 0.0002 \\
+lag1\_log\_delegators & -0.6534 & 0.1383 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{S3: lag2 robustness}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+lag2\_luck & 0.0001 & 0.0006 & 0.9188 \\
+lag1\_log\_pledge & -0.0011 & 0.0015 & 0.4802 \\
+lag2\_log\_stake & 0.0255 & 0.0041 & 0.0000 \\
+lag1\_margin\_proxy & 0.0008 & 0.0001 & 0.0000 \\
+lag2\_log\_delegators & -0.3575 & 0.0683 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Equation (conceptual)}
+$\Delta \log(delegators_{it}) = \beta X_{i,t-k} + \alpha_i + \gamma_t + \varepsilon_{it}$
+
+where $\alpha_i$ are pool fixed effects, $\gamma_t$ are epoch fixed effects, and $k$ is 1 or 2 depending on specification.
+
+\section*{Notes}
+- Lagged regressors are used to reduce reverse-causality concerns.\\
+- Margin is proxied by lagged reward.member\_pct due panel availability in source epoch blocks.\\
+- Interpretation remains associational/quasi-causal, not full causal identification.\\
+\end{document}

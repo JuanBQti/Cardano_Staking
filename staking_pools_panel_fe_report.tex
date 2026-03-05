@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage[T1]{fontenc}
+\title{Panel Fixed-Effects Report}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+Panel dataset: \texttt{/Users/juancho/staking\_pools\_panel.csv}\\
+Model: \textbf{Two-way fixed effects (pool FE + epoch FE), lagged regressors}\\
+Dependent variable: \texttt{log(1+stake\_t ADA) - log(1+stake\_\{t-1\} ADA)}\\
+Observations: \textbf{13536}, Pools: \textbf{2718}, Epochs: \textbf{5}\\
+Within $R^2$: \textbf{0.0035}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+lag\_luck & 0.0013 & 0.0025 & 0.5905 \\
+lag\_log\_pledge & 0.0014 & 0.0193 & 0.9423 \\
+lag\_log\_delegators & -0.2116 & 0.2021 & 0.2951 \\
+lag\_member\_pct & 0.0034 & 0.0007 & 0.0000 \\
+lag\_block\_minted & -0.0042 & 0.0022 & 0.0581 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Notes}
+- Lagged covariates mitigate (but do not fully remove) simultaneity/reverse causality.\\
+- SE are cluster-robust at pool level.\\
+\end{document}
