@@ -5,58 +5,15 @@
 # Keep git control files
 !.gitignore
 
-# Project documentation
+# Project documentation and script
 !README.md
 !REPORT_INDEX.md
-!staking_pools_report.md
-!staking_pools_report_ada.md
-!regression_summary.md
-!staking_pools_panel_fe_report.md
-!delegator_choice_results.md
-
-# Core scripts
 !download_cexplorer_pools_to_csv.py
-!drep_tracker.py
-!polygon_validator_analysis.py
-!Simulation_PenaltyModel.py
-!Simulation_PenaltyModel_Clean.py
-!Simulation_PenaltyModel_Complete.py
-!foc_plot.py
-!marginal_plot.py
-!test_corner.py
-!test_corner_fix.py
-!test_equilibrium.py
-!test_equilibrium_detailed.py
-!test_symmetric_eq.py
 
-# Data and result artifacts
-!staking_pools.csv
-!staking_pools_compact.csv
-!staking_pools_compact_ada.csv
-!staking_pools_not_active.csv
-!staking_pools_panel.csv
-!delegator_choice_panel.csv
-!chart_data_stake_minus_pledge_vs_fixed_cost.csv
-!chart_data_stake_minus_pledge_vs_lifetime_luck.csv
-!chart_data_stake_minus_pledge_vs_lifetime_roa.csv
-!chart_data_stake_minus_pledge_vs_margin.csv
-!chart_data_stake_minus_pledge_vs_pledge.csv
-!chart_data_stake_minus_pledge_vs_recent_luck.csv
-!chart_data_stake_minus_pledge_vs_recent_roa.csv
-!staking_pools_analysis.json
-!regression_results.json
-!staking_pools_panel_fe_results.json
-!delegator_choice_results.json
-
-# Optional publication artifacts
-!staking_pools_report_ada.pdf
-!staking_pools_panel_fe_report.pdf
-!delegator_choice_results.pdf
-!staking_pools_report_ada.tex
-!staking_pools_report_ada_snippet.tex
-!staking_pools_panel_fe_report.tex
-!delegator_choice_results.tex
-
-# Optional plots
-!drep_timeline.png
-!drep_comprehensive_analysis.png
+# Project folders
+!data/
+!data/**
+!correlation/
+!correlation/**
+!regression/
+!regression/**
