@@ -41,7 +41,7 @@ This repository collects the analysis work done on Cardano staking pools, includ
 - `regression_summary.md`
 - `staking_pools_panel_fe_report.md`
 - `delegator_choice_results.md`
-- `REPORTS.md` (index and quick guide)
+- `REPORT_INDEX.md` (index and quick guide)
 
 ### Data / Results Files
 - `staking_pools.csv`

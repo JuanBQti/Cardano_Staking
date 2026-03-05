@@ -1,4 +1,4 @@
-# Reports Index
+# Report Index
 
 This file centralizes the report outputs and related artifacts for GitHub publication.
 
