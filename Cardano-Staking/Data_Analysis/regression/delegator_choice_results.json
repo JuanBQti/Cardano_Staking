@@ -1,0 +1,222 @@
+{
+  "goal": "Explain delegator pool choice dynamics with real margin and lifetime ROA treatment",
+  "dependent_variable": "delta_log_delegators = log(1+delegators_t) - log(1+delegators_{t-1})",
+  "method": "Two-way FE (pool + epoch), cluster-robust SE by pool; plus epoch-FE-only comparison for time-invariant variables",
+  "input_files": {
+    "source_panel": "/Users/juancho/Cardano-Staking/data/delegator_choice_panel.csv",
+    "source_pools": "/Users/juancho/Cardano-Staking/data/staking_pools.csv"
+  },
+  "specifications": {
+    "S1_lag1_core_real_margin": {
+      "type": "two_way_fe",
+      "spec_name": "S1_lag1_core_real_margin",
+      "regressors_requested": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "margin"
+      ],
+      "regressors_estimated": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake"
+      ],
+      "regressors_dropped_collinear": [
+        "margin"
+      ],
+      "n_obs": 14635,
+      "n_pools": 2935,
+      "n_epochs": 5,
+      "within_r2": 0.01874510909128302,
+      "coefficients": {
+        "lag1_luck": {
+          "beta": -0.0004332122779490448,
+          "se_cluster_pool": 0.0005726453244621046,
+          "t": -0.7565106348435977,
+          "p_norm_approx": 0.4493430986167879
+        },
+        "lag1_log_pledge": {
+          "beta": -0.003520130530024092,
+          "se_cluster_pool": 0.0015502406848742641,
+          "t": -2.2706993593769607,
+          "p_norm_approx": 0.02316518383769739
+        },
+        "lag1_log_stake": {
+          "beta": 0.01474158370670056,
+          "se_cluster_pool": 0.0036161175772533635,
+          "t": 4.076632850499731,
+          "p_norm_approx": 4.569255407238515e-05
+        }
+      }
+    },
+    "S2_lag1_with_persistence_real_margin": {
+      "type": "two_way_fe",
+      "spec_name": "S2_lag1_with_persistence_real_margin",
+      "regressors_requested": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "margin",
+        "lag1_log_delegators"
+      ],
+      "regressors_estimated": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "lag1_log_delegators"
+      ],
+      "regressors_dropped_collinear": [
+        "margin"
+      ],
+      "n_obs": 14635,
+      "n_pools": 2935,
+      "n_epochs": 5,
+      "within_r2": 0.49660959149936035,
+      "coefficients": {
+        "lag1_luck": {
+          "beta": -0.00016643456801639865,
+          "se_cluster_pool": 0.0003051583810538746,
+          "t": -0.5454038897493536,
+          "p_norm_approx": 0.585475765784901
+        },
+        "lag1_log_pledge": {
+          "beta": 0.004248860801004558,
+          "se_cluster_pool": 0.0030277377987493045,
+          "t": 1.4033120050090446,
+          "p_norm_approx": 0.16052381987616737
+        },
+        "lag1_log_stake": {
+          "beta": 0.023206682665638606,
+          "se_cluster_pool": 0.004721047600111256,
+          "t": 4.915579047559639,
+          "p_norm_approx": 8.852042312490482e-07
+        },
+        "lag1_log_delegators": {
+          "beta": -0.6315251354488385,
+          "se_cluster_pool": 0.13863074374369402,
+          "t": -4.555447935967415,
+          "p_norm_approx": 5.227406247421129e-06
+        }
+      }
+    },
+    "S3_lag2_robustness_real_margin": {
+      "type": "two_way_fe",
+      "spec_name": "S3_lag2_robustness_real_margin",
+      "regressors_requested": [
+        "lag2_luck",
+        "lag1_log_pledge",
+        "lag2_log_stake",
+        "margin",
+        "lag2_log_delegators"
+      ],
+      "regressors_estimated": [
+        "lag2_luck",
+        "lag1_log_pledge",
+        "lag2_log_stake",
+        "lag2_log_delegators"
+      ],
+      "regressors_dropped_collinear": [
+        "margin"
+      ],
+      "n_obs": 8782,
+      "n_pools": 2934,
+      "n_epochs": 3,
+      "within_r2": 0.29219430428821946,
+      "coefficients": {
+        "lag2_luck": {
+          "beta": -0.00019261978651227113,
+          "se_cluster_pool": 0.0006933275458551808,
+          "t": -0.2778193188252536,
+          "p_norm_approx": 0.7811510604786078
+        },
+        "lag1_log_pledge": {
+          "beta": -0.000916568796167143,
+          "se_cluster_pool": 0.0015220128795828795,
+          "t": -0.6022083048458411,
+          "p_norm_approx": 0.5470354882579276
+        },
+        "lag2_log_stake": {
+          "beta": 0.026424322179808144,
+          "se_cluster_pool": 0.004291380863254421,
+          "t": 6.157533675482007,
+          "p_norm_approx": 7.388654132967076e-10
+        },
+        "lag2_log_delegators": {
+          "beta": -0.3693668375772456,
+          "se_cluster_pool": 0.07760916058302834,
+          "t": -4.759320095751932,
+          "p_norm_approx": 1.942461731019307e-06
+        }
+      }
+    },
+    "S4_epochFE_lag1_with_lifetime_roa_margin": {
+      "type": "epoch_fe_only",
+      "spec_name": "S4_epochFE_lag1_with_lifetime_roa_margin",
+      "regressors_requested": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "margin",
+        "lifetime_roa",
+        "lag1_log_delegators"
+      ],
+      "regressors_estimated": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "margin",
+        "lifetime_roa",
+        "lag1_log_delegators"
+      ],
+      "regressors_dropped_collinear": [],
+      "n_obs": 14359,
+      "n_pools": 2879,
+      "n_epochs": 5,
+      "r2": 0.005864091875929178,
+      "coefficients": {
+        "lag1_luck": {
+          "beta": -8.219101543017339e-05,
+          "se_cluster_pool": 0.0005182117478906277,
+          "t": -0.15860507941923463,
+          "p_norm_approx": 0.8739800266596405
+        },
+        "lag1_log_pledge": {
+          "beta": -0.0005117423265041214,
+          "se_cluster_pool": 0.0001595918379317813,
+          "t": -3.206569540999142,
+          "p_norm_approx": 0.0013432783345859178
+        },
+        "lag1_log_stake": {
+          "beta": 0.0014170424958097998,
+          "se_cluster_pool": 0.00038917017668220824,
+          "t": 3.6411898462788423,
+          "p_norm_approx": 0.00027138092129019853
+        },
+        "margin": {
+          "beta": -0.0053872842180771215,
+          "se_cluster_pool": 0.0019104779482586446,
+          "t": -2.819862026142465,
+          "p_norm_approx": 0.00480443023170829
+        },
+        "lifetime_roa": {
+          "beta": -0.0005117843167309143,
+          "se_cluster_pool": 0.0003084465072945504,
+          "t": -1.6592320049913447,
+          "p_norm_approx": 0.0970690507015124
+        },
+        "lag1_log_delegators": {
+          "beta": -0.002300635158348113,
+          "se_cluster_pool": 0.0007082925275947782,
+          "t": -3.248142636998609,
+          "p_norm_approx": 0.0011616102332163702
+        }
+      }
+    }
+  },
+  "notes": [
+    "Real margin is sourced from pool_update.active.margin and treated as fixed across epochs.",
+    "In two-way FE models, pool-constant regressors (margin, lifetime_roa) are collinear with pool fixed effects and cannot be estimated.",
+    "Epoch-FE-only comparison model is included to obtain coefficients for lifetime_roa and margin.",
+    "Interpretation remains associational/quasi-causal, not full causal identification."
+  ]
+}

@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\begin{document}
+\section*{Time-Split Validation Report}
+This is a predictive validation exercise (not a causal identification design).
+\subsection*{Split design}
+\begin{itemize}
+\item Input panel: /Users/juancho/Cardano-Staking/data/delegator\_choice\_panel.csv
+\item Train epochs: [609, 610, 613, 614]
+\item Validation epochs: [615]
+\item Approx share by rows: train 79.95%, validation 20.05%
+\end{itemize}
+\subsection*{Specifications}
+\begin{itemize}
+\item P1: lag1 luck, lag1 log pledge, lag1 log stake, margin, lifetime ROA
+\item P2: P1 plus lag1 log delegators
+\end{itemize}
+\subsection*{Model equations and variable definitions}
+Conceptual outcome equation:
+\begin{itemize}
+\item $\Delta\log(1+delegators_{it}) = \log(1+delegators_{it}) - \log(1+delegators_{i,t-1})$
+\end{itemize}
+Specification equations:
+\begin{itemize}
+\item P1: $\Delta\log(1+delegators_{it}) = \beta_0 + \beta_1 lag1\_luck_{it} + \beta_2 lag1\_log\_pledge_{it} + \beta_3 lag1\_log\_stake_{it} + \beta_4 margin_i + \beta_5 lifetime\_roa_i + error_{it}$
+\item P2: $\Delta\log(1+delegators_{it}) = \beta_0 + \beta_1 lag1\_luck_{it} + \beta_2 lag1\_log\_pledge_{it} + \beta_3 lag1\_log\_stake_{it} + \beta_4 margin_i + \beta_5 lifetime\_roa_i + \beta_6 lag1\_log\_delegators_{it} + error_{it}$
+\end{itemize}
+Variable definitions:
+\begin{itemize}
+\item $delegators_{it}$: number of delegators in pool $i$ at epoch $t$
+\item $lag1\_luck_{it}$: pool luck in epoch $t-1$
+\item $lag1\_log\_pledge_{it}$: $\log(1 + pledged\_lovelace_{i,t-1})$ (as built in the panel)
+\item $lag1\_log\_stake_{it}$: $\log(1 + epoch\_stake\_lovelace_{i,t-1})$ (as built in the panel)
+\item $margin_i$: pool active margin ($pool\_update.active.margin$), treated as time-invariant
+\item $lifetime\_roa_i$: pool lifetime ROA ($stats.lifetime.roa$), treated as time-invariant
+\item $lag1\_log\_delegators_{it}$: $\log(1 + delegators_{i,t-1})$
+\item $error_{it}$: residual term for pool $i$, epoch $t$
+\end{itemize}
+\subsection*{Performance summary}
+\begin{tabular}{lrrrrrr}
+\toprule
+Spec & Train n & Validation n & Train RMSE & Validation RMSE & Train $R^2$ & Validation $R^2$ \\
+\midrule
+P1 & 11480 & 2879 & 0.0581 & 0.0529 & 0.0028 & 0.0011 \\
+P2 & 11480 & 2879 & 0.0580 & 0.0529 & 0.0061 & 0.0027 \\
+\bottomrule
+\end{tabular}
+\subsection*{Interpretation}
+\begin{itemize}
+\item This checks out-of-sample stability across time.
+\item It does not imply causality by itself.
+\item Causal identification still needs randomization, IV, or quasi-experimental design.
+\end{itemize}
+\end{document}

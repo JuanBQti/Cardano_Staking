@@ -1,0 +1,97 @@
+{
+  "goal": "Validate predictive stability with time-based train/validation split",
+  "split": {
+    "train_epochs": [
+      609,
+      610,
+      613,
+      614
+    ],
+    "validation_epochs": [
+      615
+    ],
+    "epoch_row_counts": {
+      "609": 2914,
+      "610": 2918,
+      "613": 2934,
+      "614": 2934,
+      "615": 2935
+    },
+    "train_rows_raw": 11700,
+    "validation_rows_raw": 2935,
+    "train_row_share": 0.7994533652203621,
+    "validation_row_share": 0.20054663477963786
+  },
+  "specifications": {
+    "P1_lagged_core_with_margin_lifetime_roa": {
+      "name": "P1_lagged_core_with_margin_lifetime_roa",
+      "features": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "margin",
+        "lifetime_roa"
+      ],
+      "coefficients": {
+        "intercept": -0.0004917832779034115,
+        "lag1_luck": -8.937787803245757e-05,
+        "lag1_log_pledge": -0.000653704374977659,
+        "lag1_log_stake": 0.0009014790322809517,
+        "margin": -0.0034330774021043126,
+        "lifetime_roa": -0.0013687813441111828
+      },
+      "train_metrics": {
+        "n": 11480,
+        "rmse": 0.05806119094544494,
+        "mae": 0.007370024100380678,
+        "r2": 0.0028461766247471765
+      },
+      "validation_metrics": {
+        "n": 2879,
+        "rmse": 0.052894511309824775,
+        "mae": 0.007237454565698924,
+        "r2": 0.0011104801436244705
+      },
+      "n_train_used": 11480,
+      "n_validation_used": 2879
+    },
+    "P2_lagged_plus_persistence_with_margin_lifetime_roa": {
+      "name": "P2_lagged_plus_persistence_with_margin_lifetime_roa",
+      "features": [
+        "lag1_luck",
+        "lag1_log_pledge",
+        "lag1_log_stake",
+        "margin",
+        "lifetime_roa",
+        "lag1_log_delegators"
+      ],
+      "coefficients": {
+        "intercept": -0.0018362959146984012,
+        "lag1_luck": 7.29145367779134e-05,
+        "lag1_log_pledge": -0.0006043658590198142,
+        "lag1_log_stake": 0.0015104487511275735,
+        "margin": -0.005105725219938607,
+        "lifetime_roa": -0.0004008789377902416,
+        "lag1_log_delegators": -0.002448484770253165
+      },
+      "train_metrics": {
+        "n": 11480,
+        "rmse": 0.057965947954425896,
+        "mae": 0.008152383151277623,
+        "r2": 0.006114935519152764
+      },
+      "validation_metrics": {
+        "n": 2879,
+        "rmse": 0.052852406435306115,
+        "mae": 0.008048479867438856,
+        "r2": 0.0027001111803508504
+      },
+      "n_train_used": 11480,
+      "n_validation_used": 2879
+    }
+  },
+  "notes": [
+    "Time split uses earlier epochs for train and later epochs for validation.",
+    "This evaluates predictive generalization, not causal identification."
+  ]
+}

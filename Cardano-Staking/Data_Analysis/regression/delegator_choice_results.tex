@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\begin{document}
+\section*{Delegator Choice FE Report}
+Method: two-way FE (pool + epoch), cluster-robust SE by pool.\\
+Dependent variable: $\Delta\log(1+delegators_{it}) = \log(1+delegators_t)-\log(1+delegators_{t-1})$.
+\subsection*{Why lifetime ROA was not in prior FE equations}
+\begin{itemize}
+\item In two-way FE, pool-level constants are absorbed by pool fixed effects ($\alpha_i$).
+\item $lifetime\_roa$ is pool-constant in this dataset, so it is collinear with $\alpha_i$ and cannot be estimated in a pool-FE model.
+\item Using real $margin$ as a fixed pool value has the same issue in two-way FE.
+\item To estimate coefficients for these variables, we add an epoch-FE-only comparison model (no pool FE).
+\end{itemize}
+\subsection*{Margin update requested}
+\begin{itemize}
+\item Replaced $lag1\_margin\_proxy$ with real pool $margin$ from $pool\_update.active.margin$.
+\item Assumption: margin is fixed across observed epochs for each pool.
+\item In two-way FE specs, $margin$ is dropped automatically for collinearity with pool FE.
+\end{itemize}
+\subsection*{Model definitions}
+\begin{itemize}
+\item S1 (two-way FE, lag1 core): requested regressors are lag1 luck, lag1 log pledge, lag1 log stake, and margin; margin is pool-fixed and absorbed by pool FE ($\alpha_i$), so it is not estimated separately.
+\item S2 (two-way FE, lag1 + persistence): requested regressors are S1 plus lag1 log delegators; margin is again absorbed by pool FE.
+\item S3 (two-way FE, lag2 robustness): requested regressors are lag2 luck, lag1 log pledge, lag2 log stake, margin, lag2 log delegators; margin is absorbed by pool FE.
+\item S4 (epoch FE only, comparison): requested regressors are lag1 luck, lag1 log pledge, lag1 log stake, margin, lifetime ROA, lag1 log delegators, plus epoch FE; here margin and lifetime ROA are identifiable.
+\end{itemize}
+\subsection*{Model equations and variable definitions}
+Outcome definition:
+\begin{itemize}
+\item $\Delta\log(1+delegators_{it}) = \log(1+delegators_{it}) - \log(1+delegators_{i,t-1})$
+\end{itemize}
+Specification equations:
+\begin{itemize}
+\item S1 (two-way FE, estimable equation): $\Delta\log(1+delegators_{i,t}) = \beta_1 luck_{i,t-1} + \beta_2 \log(1+pledge_{i,t-1}) + \beta_3 \log(1+stake_{i,t-1}) + \alpha_i + \gamma_t + error_{i,t}$
+\item Requested regressor $margin_i$ is absorbed by $\alpha_i$ and therefore not shown in the estimable equation.
+\item S2 (two-way FE, estimable equation): $\Delta\log(1+delegators_{i,t}) = \beta_1 luck_{i,t-1} + \beta_2 \log(1+pledge_{i,t-1}) + \beta_3 \log(1+stake_{i,t-1}) + \beta_4 \log(1+delegators_{i,t-1}) + \alpha_i + \gamma_t + error_{i,t}$
+\item Requested regressor $margin_i$ is absorbed by $\alpha_i$ and therefore not shown in the estimable equation.
+\item S3 (two-way FE, estimable equation): $\Delta\log(1+delegators_{i,t}) = \beta_1 luck_{i,t-2} + \beta_2 \log(1+pledge_{i,t-1}) + \beta_3 \log(1+stake_{i,t-2}) + \beta_4 \log(1+delegators_{i,t-2}) + \alpha_i + \gamma_t + error_{i,t}$
+\item Requested regressor $margin_i$ is absorbed by $\alpha_i$ and therefore not shown in the estimable equation.
+\item S4 (epoch FE only comparison): $\Delta\log(1+delegators_{i,t}) = \beta_0 + \beta_1 luck_{i,t-1} + \beta_2 \log(1+pledge_{i,t-1}) + \beta_3 \log(1+stake_{i,t-1}) + \beta_4 margin_i + \beta_5 lifetime\_roa_i + \beta_6 \log(1+delegators_{i,t-1}) + \gamma_t + error_{i,t}$
+\end{itemize}
+Variable definitions:
+\begin{itemize}
+\item $delegators_{it}$: number of delegators in pool $i$ at epoch $t$
+\item $luck_{i,t-1}$, $luck_{i,t-2}$: pool luck lagged by 1 or 2 epochs
+\item $\log(1+pledge_{i,t-1})$: log pledge lagged by 1 epoch
+\item $\log(1+stake_{i,t-1})$, $\log(1+stake_{i,t-2})$: log stake lagged by 1 or 2 epochs
+\item $\log(1+delegators_{i,t-1})$, $\log(1+delegators_{i,t-2})$: log delegators lagged by 1 or 2 epochs
+\item $margin_i$: pool active margin ($pool\_update.active.margin$), treated as fixed by pool
+\item $lifetime\_roa_i$: pool lifetime ROA ($stats.lifetime.roa$), treated as fixed by pool
+\item $\alpha_i$: pool fixed effects; $\gamma_t$: epoch fixed effects; $error_{it}$: residual
+\item Dataset mapping: $lag1\_luck_{it}=luck_{i,t-1}$, $lag2\_luck_{it}=luck_{i,t-2}$, and similarly for other $lag1\_$/$lag2\_$ fields
+\end{itemize}
+\subsection*{Assumptions and caveats}
+\begin{itemize}
+\item Observational data: results are associational/quasi-causal, not full causal identification.
+\item Two-way FE reduces bias from time-invariant pool heterogeneity, but time-varying omitted factors may remain.
+\item Lagged regressors reduce (but do not eliminate) reverse-causality/simultaneity concerns.
+\item $margin$ and $lifetime\_roa$ are treated as pool-fixed; in two-way FE they are not identifiable and are absorbed by pool FE.
+\item Their coefficients are reported only in the epoch-FE-only comparison spec (S4), which is more vulnerable to pool-level confounding.
+\item Cluster-robust SE by pool address within-pool serial correlation and heteroskedasticity, but inference is still model-dependent.
+\item Epoch coverage is limited (available lag structure), so long-horizon dynamics are only partially captured.
+\item Functional form uses log transforms and linear terms; misspecification risk remains.
+\end{itemize}
+\subsection*{Specification summary}
+\begin{longtable}{l l r r r l p{3.2cm}}
+\toprule
+Spec & Type & n\_obs & n\_pools & n\_epochs & Fit & Dropped in estimation \\
+\midrule
+\endhead
+S1 & two-way FE & 14635 & 2935 & 5 & 0.0187 (within $R^2$) & margin \\
+S2 & two-way FE & 14635 & 2935 & 5 & 0.4966 (within $R^2$) & margin \\
+S3 & two-way FE & 8782 & 2934 & 3 & 0.2922 (within $R^2$) & margin \\
+S4 & epoch FE only & 14359 & 2879 & 5 & 0.0059 ($R^2$) & none \\
+\bottomrule
+\end{longtable}
+\subsection*{S1 Coefficients}
+\begin{longtable}{l r r r}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+\endhead
+lag1\_luck & -0.000433 & 0.000573 & 0.4493 \\
+lag1\_log\_pledge & -0.003520 & 0.001550 & 0.0232 \\
+lag1\_log\_stake & 0.014742 & 0.003616 & 0.0000 \\
+\bottomrule
+\end{longtable}
+\subsection*{S2 Coefficients}
+\begin{longtable}{l r r r}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+\endhead
+lag1\_luck & -0.000166 & 0.000305 & 0.5855 \\
+lag1\_log\_pledge & 0.004249 & 0.003028 & 0.1605 \\
+lag1\_log\_stake & 0.023207 & 0.004721 & 0.0000 \\
+lag1\_log\_delegators & -0.631525 & 0.138631 & 0.0000 \\
+\bottomrule
+\end{longtable}
+\subsection*{S3 Coefficients}
+\begin{longtable}{l r r r}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+\endhead
+lag2\_luck & -0.000193 & 0.000693 & 0.7812 \\
+lag1\_log\_pledge & -0.000917 & 0.001522 & 0.5470 \\
+lag2\_log\_stake & 0.026424 & 0.004291 & 0.0000 \\
+lag2\_log\_delegators & -0.369367 & 0.077609 & 0.0000 \\
+\bottomrule
+\end{longtable}
+\subsection*{S4 Coefficients (lifetime ROA + margin identifiable)}
+\begin{longtable}{l r r r}
+\toprule
+Variable & Beta & Cluster SE (pool) & p-value \\
+\midrule
+\endhead
+lag1\_luck & -0.000082 & 0.000518 & 0.8740 \\
+lag1\_log\_pledge & -0.000512 & 0.000160 & 0.0013 \\
+lag1\_log\_stake & 0.001417 & 0.000389 & 0.0003 \\
+margin & -0.005387 & 0.001910 & 0.0048 \\
+lifetime\_roa & -0.000512 & 0.000308 & 0.0971 \\
+lag1\_log\_delegators & -0.002301 & 0.000708 & 0.0012 \\
+\bottomrule
+\end{longtable}
+\subsection*{Interpretation}
+\begin{itemize}
+\item Two-way FE answers a within-pool-over-time question; time-invariant regressors are not identifiable there.
+\item $lifetime\_roa$ and fixed $margin$ should be interpreted from S4 (epoch FE only), not from S1-S3.
+\item $\log(stake)$ remains a strong predictor in FE specifications.
+\item Results remain associational/quasi-causal, not fully causal.
+\end{itemize}
+\end{document}
