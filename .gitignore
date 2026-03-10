@@ -1,19 +1,16 @@
 # This git repo is located at the home directory.
-# Ignore everything by default, then allow only analysis artifacts.
+# Ignore everything by default, then allow only Cardano_Staking data artifacts.
 *
 
 # Keep git control files
 !.gitignore
 
-# Project documentation and script
-!README.md
-!REPORT_INDEX.md
-!download_cexplorer_pools_to_csv.py
+# Keep Cardano-Staking project folder visible
+!Cardano-Staking/
 
-# Project folders
-!data/
-!data/**
-!correlation/
-!correlation/**
-!regression/
-!regression/**
+# Track only the Cardano staking analysis subtree
+!Cardano-Staking/Data_Analysis/
+!Cardano-Staking/Data_Analysis/**
+
+# Tokenomics must live in a separate repository
+Cardano-Staking/Tokenomic-CIP50/
