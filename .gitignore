@@ -15,8 +15,5 @@
 # Tokenomics must live in a separate repository
 Cardano-Staking/Tokenomic-CIP50/
 
-# Keep the independent clone folder visible while hiding its nested Git metadata
-!Research-Cardano/
-!Research-Cardano/spo-incentives-cloned/
-!Research-Cardano/spo-incentives-cloned/**
-Research-Cardano/spo-incentives-cloned/.git/
+# Keep the separate Research-Cardano repository out of this repo
+Research-Cardano/
